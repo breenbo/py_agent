@@ -26,8 +26,6 @@ def get_file_content(working_directory: str, file_path: str):
     if full_path_abs == None:
         return
 
-    print("valid file found")
-
     with open(full_path_abs, "r") as f:
         file_content_string = f.read(FILE_READ_MAX_CHAR)
 

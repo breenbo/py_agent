@@ -16,14 +16,16 @@ def check_file(working_directory: str, file_path: str, checker: Callable[[str, s
     if full_path_abs == None:
         return False
 
-    wd_directories = full_path_abs.split("/")
+    is_ok = checker(full_path_abs, file_path)
+    if not is_ok:
+        return False
 
+    wd_directories = full_path_abs.split("/")
     if working_directory not in wd_directories:
         print(f'Error: Cannot list "{file_path}" as it is outside the permitted working directory')
         return False
 
-    is_ok = checker(full_path_abs, file_path)
 
-    return is_ok
+    return True
 
 
