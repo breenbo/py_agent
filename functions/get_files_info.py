@@ -1,33 +1,30 @@
 import os
+from functions.helpers import get_full_path, check_file
 
-def get_full_path(working_directory: str, directory: str):
-    try:
-        full_path = os.path.join(working_directory, directory)
-        full_path_abs = os.path.abspath(full_path)
-        return full_path_abs
-    except Exception as e:
-        print(f"Error: {e}")
+def dir_checker(full_path_abs: str, file_path: str):
+    if file_path.startswith("/"):
+        print(f'Error: Cannot list "{file_path}" as it is outside the permitted working directory')
+        return False
+
+    if not os.path.isdir(full_path_abs):
+        print(f'Error: "{file_path}" is not a directory')
+        return False
+
+    return True
+
 
 
 def get_files_info(working_directory: str, directory: str = "."):
-    if directory.startswith("/"):
-        print(f'Error: Cannot list "{directory}" as it is outside the permitted working directory')
-        return
 
+    is_directory_valid = check_file(working_directory, directory, dir_checker)
+
+    if not is_directory_valid: 
+        return
 
     full_path_abs= get_full_path(working_directory, directory)
     if full_path_abs == None:
         return
 
-    wd_directories = full_path_abs.split("/")
-
-    if working_directory not in wd_directories:
-        print(f'Error: Cannot list "{directory}" as it is outside the permitted working directory')
-        return
-
-    if not os.path.isdir(full_path_abs):
-        print(f'Error: "{directory}" is not a directory')
-        return
 
     # display title
     if directory == ".":
