@@ -2,6 +2,8 @@ import os, sys
 from dotenv import load_dotenv
 from google import genai
 from google.genai import types
+from config import system_prompt
+from functions.get_files_info import schema_get_files_info
 
 # setup gemini api
 def setup_gemini():
@@ -19,7 +21,17 @@ def use_gemini(client: genai.Client, user_prompt: str, is_verbose: bool):
         types.Content(role="user", parts=[types.Part(text=user_prompt)]),
     ]
 
-    response = client.models.generate_content(model= model, contents= messages)
+    available_functions = types.Tool(
+        function_declarations=[
+            schema_get_files_info
+        ]
+    )
+
+    response = client.models.generate_content(model= model, 
+                                              contents= messages,
+                                              config = types.GenerateContentConfig(
+                                              tools = [available_functions],
+                                              system_instruction=system_prompt))
 
     if is_verbose:
         print(f"User prompt: {user_prompt}")
@@ -27,7 +39,11 @@ def use_gemini(client: genai.Client, user_prompt: str, is_verbose: bool):
         print(f"Prompt tokens: {response.usage_metadata.prompt_token_count}")
         print(f"Response tokens: {response.usage_metadata.candidates_token_count}")
     else:
-        print(response.text)
+        if response.function_calls == None:
+            print(response.text)
+        else:
+            for fn in response.function_calls:
+                print(f"Calling function: {fn.name}({fn.args})")
 
 def get_user_prompt():
     if len(sys.argv) == 1:
