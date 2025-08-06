@@ -10,6 +10,7 @@ def file_checker(_full_path_abs: str, file_path: str) -> bool:
    
     return True
 
+
 def write_file(working_directory: str, file_path: str, content: str):
     is_file_valid = check_file(working_directory, file_path, file_checker)
 
