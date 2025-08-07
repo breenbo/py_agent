@@ -1,6 +1,25 @@
 import os
 from functions.helpers import check_file, get_full_path
+from google.genai import types
 
+# llm function declaration
+schema_write_file= types.FunctionDeclaration(
+    name="write_file",
+    description="Write content into a file, constrained to the working directory. If the file doesn't exists, it is created. If it already exists, it is overwritten.",
+    parameters=types.Schema(
+        type=types.Type.OBJECT,
+        properties={
+            "file_path": types.Schema(
+                type=types.Type.STRING,
+                description="The file path to the file to be written, relative to the working directory.",
+            ),
+            "content" : types.Schema(
+                type=types.Type.STRING,
+                description="The content to be written into the file referenced by the file path."
+            )
+        },
+    ),
+)
 
 def file_checker(_full_path_abs: str, file_path: str) -> bool:
     if file_path.startswith("/"):

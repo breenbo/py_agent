@@ -1,6 +1,22 @@
 import os
 from config import FILE_READ_MAX_CHAR
 from functions.helpers import check_file, get_full_path
+from google.genai import types
+
+# llm function declaration
+schema_get_file_content= types.FunctionDeclaration(
+    name="get_file_content",
+    description="Get the content of a file, truncated at some characters count, constrained to the working directory.",
+    parameters=types.Schema(
+        type=types.Type.OBJECT,
+        properties={
+            "file_path": types.Schema(
+                type=types.Type.STRING,
+                description="The file path to the file from, relative to the working directory.",
+            ),
+        },
+    ),
+)
 
 def file_checker(full_path_abs: str, file_path: str) -> bool:
     if file_path.startswith("/"):

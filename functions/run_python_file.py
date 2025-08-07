@@ -1,6 +1,25 @@
 import os, sys
 import subprocess
 from functions.helpers import Action, check_file, get_full_path
+from google.genai import types
+
+schema_run_python_file= types.FunctionDeclaration(
+    name="run_python_file",
+    description="Run a python file, constrained to the working directory. Optinal arguments ca be passed to the python file.",
+    parameters=types.Schema(
+        type=types.Type.OBJECT,
+        properties={
+            "file_path": types.Schema(
+                type=types.Type.STRING,
+                description="The file path to the python path, relative to the working directory.",
+            ),
+            "args": types.Schema(
+                type=types.Type.STRING,
+                description="Array of string of optional arguments to be passed to the python file",
+            ),
+        },
+    ),
+)
 
 def file_checker(full_path_abs: str, file_path: str):
     if file_path.startswith("/"):
