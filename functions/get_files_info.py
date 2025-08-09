@@ -31,22 +31,22 @@ def dir_checker(full_path_abs: str, file_path: str):
 
 
 def get_files_info(working_directory: str, directory: str = "."):
-
     is_directory_valid = check_file(working_directory, directory, dir_checker)
 
     if not is_directory_valid: 
-        return
+        return "Error: directory no valid"
 
     full_path_abs= get_full_path(working_directory, directory)
     if full_path_abs == None:
-        return
+        return "Error: no full path"
 
+    response = ""
 
     # display title
     if directory == ".":
-        print("Result for current directory:")
+        response = "Result for current directory:\n"
     else:
-        print(f"Result for '{directory}' directory:")
+        response = f"Result for '{directory}' directory:\n"
 
     # display dir infos
     directories = os.listdir(full_path_abs)
@@ -58,7 +58,9 @@ def get_files_info(working_directory: str, directory: str = "."):
                 file_size= os.path.getsize(abs_path)
                 is_dir= os.path.isdir(abs_path)
 
-                print(f" - {dir}: file_size={file_size} bytes, is_dir={is_dir}")
+                response += f" - {dir}: file_size={file_size} bytes, is_dir={is_dir}"
             except Exception as e:
-                print(f"Error: {e}")
+                response += f"Error: {e}"
+
+    return response
 

@@ -46,9 +46,6 @@ def get_file_content(working_directory: str, file_path: str):
         file_content_string = f.read(FILE_READ_MAX_CHAR)
 
         if len(file_content_string) < FILE_READ_MAX_CHAR:
-            print(f"{file_content_string}")
+            return(f"{file_content_string}")
         else:
-            print(f'{file_content_string}[...File "{file_path}" truncated at {FILE_READ_MAX_CHAR} characters]')
-
-
-        return file_content_string
+            return(f'{file_content_string}[...File "{file_path}" truncated at {FILE_READ_MAX_CHAR} characters]')
